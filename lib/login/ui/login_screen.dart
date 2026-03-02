@@ -33,7 +33,7 @@ class LoginScreenView extends StatelessWidget {
             _showErrorDialog(context, state.errorMessage);
           }
           if (state.isLoginSuccess) {
-            Navigator.of(context).pushReplacementNamed('/home');
+            Navigator.of(context).pushReplacementNamed('/category-list');
           }
         },
         builder: (context, state) {
@@ -53,7 +53,8 @@ class LoginScreenView extends StatelessWidget {
                     _buttonLogin(context, state),
                     const SizedBox(height: 200),
                     _buildBottom(),
-                    SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
+                    SizedBox(
+                        height: MediaQuery.of(context).padding.bottom + 20),
                   ],
                 ),
               ),
@@ -77,7 +78,9 @@ class LoginScreenView extends StatelessWidget {
       controller: context.read<LoginBloc>().usernameController,
       hintText: 'Tài khoản',
       clearIconAsset: 'assets/icons/blank.svg',
-      validator: (value) => (value == null || value.trim().isEmpty) ? 'Tài khoản không được để trống' : null,
+      validator: (value) => (value == null || value.trim().isEmpty)
+          ? 'Tài khoản không được để trống'
+          : null,
     );
   }
 
@@ -88,7 +91,8 @@ class LoginScreenView extends StatelessWidget {
       hintText: 'Mật khẩu',
       showPassword: true,
       validator: (value) {
-        if (value == null || value.trim().isEmpty) return 'Mật khẩu không được để trống';
+        if (value == null || value.trim().isEmpty)
+          return 'Mật khẩu không được để trống';
         if (value.length < 6) return 'Mật khẩu tối thiểu 6 ký tự';
         return null;
       },
@@ -108,11 +112,16 @@ class LoginScreenView extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFf24e1e),
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           child: state.isLoading
-              ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white))
-              : const Text("Đăng nhập", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(color: Colors.white))
+              : const Text("Đăng nhập",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
         ),
       ),
     );
@@ -125,7 +134,9 @@ class LoginScreenView extends StatelessWidget {
         title: const Text("Thông báo"),
         content: Text(message),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Đóng")),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Đóng")),
         ],
       ),
     );
@@ -137,9 +148,18 @@ class LoginScreenView extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          FooterButton(svgAsset: 'assets/icons/headphone.svg', label: 'Trợ giúp', onTap: () {}),
-          FooterButton(svgAsset: 'assets/icons/facebook.svg', label: 'Group', onTap: () {}),
-          FooterButton(svgAsset: 'assets/icons/search.svg', label: 'Tra cứu', onTap: () {}),
+          FooterButton(
+              svgAsset: 'assets/icons/headphone.svg',
+              label: 'Trợ giúp',
+              onTap: () {}),
+          FooterButton(
+              svgAsset: 'assets/icons/facebook.svg',
+              label: 'Group',
+              onTap: () {}),
+          FooterButton(
+              svgAsset: 'assets/icons/search.svg',
+              label: 'Tra cứu',
+              onTap: () {}),
         ],
       ),
     );

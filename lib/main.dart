@@ -14,7 +14,7 @@ void main() async {
   final String? token = box.get('token');
   final bool hasLogin = token != null && token.isNotEmpty;
 
-  runApp(MyApp(initialRoute: hasLogin ? Routes.home : Routes.login));
+  runApp(MyApp(initialRoute: hasLogin ? Routes.categoryList : Routes.login));
 }
 
 class MyApp extends StatelessWidget {
