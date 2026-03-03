@@ -33,7 +33,8 @@ class LoginScreenView extends StatelessWidget {
             _showErrorDialog(context, state.errorMessage);
           }
           if (state.isLoginSuccess) {
-            Navigator.of(context).pushReplacementNamed('/category-list');
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home', (route) => false);
           }
         },
         builder: (context, state) {

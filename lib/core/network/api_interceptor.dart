@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+
+import '../navigation/app_navigator.dart';
+import '../../routes/app_routes.dart';
 
 class ApiInterceptor extends Interceptor {
   @override
@@ -14,14 +17,15 @@ class ApiInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (response.requestOptions.path.contains('/login') &&
-        response.statusCode == 200) {
-      final token = response.data['data']['access_token'];
-      if (token != null) {
-        Hive.box('settings').put('token', token);
-      }
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 401) {
+      Hive.box('settings').delete('token');
+
+      navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        Routes.login,
+        (route) => false,
+      );
     }
-    return handler.next(response);
+    return handler.next(err);
   }
 }

@@ -5,13 +5,16 @@ import '../models/login_request.dart';
 class AuthRepository {
   final ApiClient _apiClient = ApiClient();
 
-  Future<bool> login(LoginRequest request) async {
+  Future<String?> login(LoginRequest request) async {
     final response = await _apiClient.dio.post(
       '/login',
       data: request.toJson(),
     );
 
-    final baseResponse = BaseResponse.fromJson(response.data);
-    return baseResponse.data != null;
+    final baseResponse = BaseResponse<Map<String, dynamic>>.fromJson(
+      response.data,
+      func: (x) => x as Map<String, dynamic>,
+    );
+    return baseResponse.data?['access_token'] as String?;
   }
 }

@@ -29,22 +29,28 @@ class _CategoryView extends StatelessWidget {
           listener: (context, state) {
             if (state.getCategoriesStatus == CategoryListStatus.error) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.errorMessage), backgroundColor: Colors.red),
+                SnackBar(
+                    content: Text(state.errorMessage),
+                    backgroundColor: Colors.red),
               );
             }
           },
         ),
-        // Lắng nghe kết quả xóa
         BlocListener<CategoryCubit, CategoryState>(
-          listenWhen: (p, c) => p.deleteCategoryStatus != c.deleteCategoryStatus,
+          listenWhen: (p, c) =>
+              p.deleteCategoryStatus != c.deleteCategoryStatus,
           listener: (context, state) {
             if (state.deleteCategoryStatus == CategoryListStatus.loaded) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Đã xóa danh mục"), backgroundColor: Colors.green),
+                const SnackBar(
+                    content: Text("Đã xóa danh mục"),
+                    backgroundColor: Colors.green),
               );
             } else if (state.deleteCategoryStatus == CategoryListStatus.error) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.errorMessage), backgroundColor: Colors.red),
+                SnackBar(
+                    content: Text(state.errorMessage),
+                    backgroundColor: Colors.red),
               );
             }
           },
@@ -53,8 +59,10 @@ class _CategoryView extends StatelessWidget {
       child: Scaffold(
         body: BlocBuilder<CategoryCubit, CategoryState>(
           builder: (context, state) {
-            if (state.getCategoriesStatus == CategoryListStatus.loading && state.categories.isEmpty) {
-              return const Center(child: CircularProgressIndicator(color: Color(0xFFf24e1e)));
+            if (state.getCategoriesStatus == CategoryListStatus.loading &&
+                state.categories.isEmpty) {
+              return const Center(
+                  child: CircularProgressIndicator(color: Color(0xFFf24e1e)));
             }
 
             if (state.categories.isEmpty) {
@@ -72,8 +80,10 @@ class _CategoryView extends StatelessWidget {
                     elevation: 2,
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     child: ListTile(
-                      leading: const CircleAvatar(backgroundColor: Color(0xFFf24e1e), radius: 6),
-                      title: Text(cat.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      leading: const CircleAvatar(
+                          backgroundColor: Color(0xFFf24e1e), radius: 6),
+                      title: Text(cat.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -85,7 +95,7 @@ class _CategoryView extends StatelessWidget {
                                 Routes.categoryForm,
                                 arguments: cat,
                               );
-                              if (result == true && context.mounted) {
+                              if (result == true) {
                                 context.read<CategoryCubit>().fetchCategories();
                               }
                             },
@@ -114,7 +124,9 @@ class _CategoryView extends StatelessWidget {
         title: const Text("Xác nhận xóa"),
         content: const Text("Bạn có chắc chắn muốn xóa danh mục này?"),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text("Hủy")),
+          TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text("Hủy")),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
