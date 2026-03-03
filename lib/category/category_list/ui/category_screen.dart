@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import '../../../routes/app_routes.dart';
 import '../cubit/category_cubit.dart';
 import '../cubit/category_state.dart';
@@ -57,6 +58,25 @@ class _CategoryView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Quản lý Danh mục",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0.5,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.red),
+              onPressed: () {
+                Hive.box('settings').delete('token');
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.login, (route) => false);
+              },
+            ),
+          ],
+        ),
         body: BlocBuilder<CategoryCubit, CategoryState>(
           builder: (context, state) {
             if (state.getCategoriesStatus == CategoryListStatus.loading &&
