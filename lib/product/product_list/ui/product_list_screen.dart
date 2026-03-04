@@ -26,47 +26,15 @@ class ProductListScreen extends StatelessWidget {
   }
 }
 
-class _ProductListView extends StatefulWidget {
+class _ProductListView extends StatelessWidget {
   const _ProductListView();
-
-  @override
-  State<_ProductListView> createState() => _ProductListViewState();
-}
-
-class _ProductListViewState extends State<_ProductListView> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
-  @override
-  void dispose() {
-    _refreshController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductListBloc, ProductListState>(
-      listenWhen: (prev, curr) =>
-          prev.status != curr.status ||
-          prev.isDeleteSuccess != curr.isDeleteSuccess,
+      listenWhen: (prev, curr) => prev.deleteStatus != curr.deleteStatus,
       listener: (context, state) {
-        if (state.status == ProductListStatus.success) {
-          _refreshController.refreshCompleted();
-          _refreshController.resetNoData();
-        } else if (state.status == ProductListStatus.failure) {
-          _refreshController.refreshFailed();
-          _refreshController.loadFailed();
-        } else if (state.status == ProductListStatus.loadingMore &&
-            state.hasReachedMax) {
-          _refreshController.loadNoData();
-        } else if (state.status == ProductListStatus.success &&
-            state.hasReachedMax) {
-          _refreshController.loadNoData();
-        } else if (state.status == ProductListStatus.success) {
-          _refreshController.loadComplete();
-        }
-
-        if (state.isDeleteSuccess) {
+        if (state.deleteStatus == ProductDeleteStatus.loaded) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Đã xóa sản phẩm"),
@@ -86,11 +54,30 @@ class _ProductListViewState extends State<_ProductListView> {
           foregroundColor: Colors.black,
           elevation: 0.5,
         ),
-        body: Column(
+        body: Stack(
           children: [
-            _buildSearchBar(context),
-            _buildCategoryFilter(),
-            Expanded(child: _buildProductList()),
+            Column(
+              children: [
+                _buildSearchBar(context),
+                _buildCategoryFilter(),
+                Expanded(child: _buildProductList()),
+              ],
+            ),
+            BlocBuilder<ProductListBloc, ProductListState>(
+              buildWhen: (prev, curr) => prev.deleteStatus != curr.deleteStatus,
+              builder: (context, state) {
+                if (state.deleteStatus == ProductDeleteStatus.loading) {
+                  return Container(
+                    color: Colors.black.withOpacity(0.3),
+                    child: const Center(
+                      child:
+                          CircularProgressIndicator(color: Color(0xFFf24e1e)),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
           ],
         ),
       ),
@@ -184,7 +171,7 @@ class _ProductListViewState extends State<_ProductListView> {
         }
 
         return SmartRefresher(
-          controller: _refreshController,
+          controller: context.read<ProductListBloc>().refreshController,
           enablePullDown: true,
           enablePullUp: true,
           onRefresh: () =>

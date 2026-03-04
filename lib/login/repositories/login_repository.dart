@@ -1,6 +1,7 @@
 import '../../core/network/api_client.dart';
 import '../../core/network/base_response.dart';
 import '../models/login_request.dart';
+import '../models/login_response.dart';
 
 class AuthRepository {
   final ApiClient _apiClient = ApiClient();
@@ -11,10 +12,10 @@ class AuthRepository {
       data: request.toJson(),
     );
 
-    final baseResponse = BaseResponse<Map<String, dynamic>>.fromJson(
+    final baseResponse = BaseResponse<LoginResponse>.fromJson(
       response.data,
-      func: (x) => x as Map<String, dynamic>,
+      func: (x) => LoginResponse.fromJson(x as Map<String, dynamic>),
     );
-    return baseResponse.data?['access_token'] as String?;
+    return baseResponse.data?.accessToken;
   }
 }

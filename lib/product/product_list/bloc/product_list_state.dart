@@ -5,6 +5,8 @@ import '../../entities/product.dart';
 
 enum ProductListStatus { initial, loading, loadingMore, success, failure }
 
+enum ProductDeleteStatus { initial, loading, loaded }
+
 class ProductListState extends Equatable {
   final ProductListStatus status;
   final List<Product> products;
@@ -14,7 +16,7 @@ class ProductListState extends Equatable {
   final int currentPage;
   final bool hasReachedMax;
   final String errorMessage;
-  final bool isDeleteSuccess;
+  final ProductDeleteStatus deleteStatus;
 
   const ProductListState({
     this.status = ProductListStatus.initial,
@@ -25,7 +27,7 @@ class ProductListState extends Equatable {
     this.currentPage = 1,
     this.hasReachedMax = false,
     this.errorMessage = '',
-    this.isDeleteSuccess = false,
+    this.deleteStatus = ProductDeleteStatus.initial,
   });
 
   ProductListState copyWith({
@@ -38,7 +40,7 @@ class ProductListState extends Equatable {
     int? currentPage,
     bool? hasReachedMax,
     String? errorMessage,
-    bool? isDeleteSuccess,
+    ProductDeleteStatus? deleteStatus,
   }) {
     return ProductListState(
       status: status ?? this.status,
@@ -51,7 +53,7 @@ class ProductListState extends Equatable {
       currentPage: currentPage ?? this.currentPage,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       errorMessage: errorMessage ?? this.errorMessage,
-      isDeleteSuccess: isDeleteSuccess ?? this.isDeleteSuccess,
+      deleteStatus: deleteStatus ?? this.deleteStatus,
     );
   }
 
@@ -65,6 +67,6 @@ class ProductListState extends Equatable {
         currentPage,
         hasReachedMax,
         errorMessage,
-        isDeleteSuccess,
+        deleteStatus,
       ];
 }

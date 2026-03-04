@@ -114,10 +114,7 @@ class _ProductFormView extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<int>(
-                    value: state.categories
-                            .any((c) => c.id == state.selectedCategoryId)
-                        ? state.selectedCategoryId
-                        : null,
+                    value: state.selectedCategoryId,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey[100],
