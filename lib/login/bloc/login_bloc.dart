@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../models/login_request.dart';
 import '../repositories/login_repository.dart';
 import 'login_event.dart';
@@ -29,9 +30,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: passwordController.text.trim(),
       );
 
-      final success = await _authRepository.login(request);
+      final token = await _authRepository.login(request);
 
-      if (success) {
+      if (token != null) {
+        await Hive.box('settings').put('token', token);
         emit(state.copyWith(isLoading: false, isLoginSuccess: true));
       } else {
         emit(state.copyWith(

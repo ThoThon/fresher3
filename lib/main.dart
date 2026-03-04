@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'core/navigation/app_navigator.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       initialRoute: initialRoute,
       onGenerateRoute: AppPages.generateRoute,
     );
