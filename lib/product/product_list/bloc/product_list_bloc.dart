@@ -51,7 +51,6 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
         status: ProductListStatus.success,
         products: products,
         currentPage: 1,
-        hasReachedMax: products.length < _pageSize,
       ));
     } catch (e) {
       debugPrint("Lỗi fetchProducts: $e");
@@ -76,23 +75,20 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
         status: ProductListStatus.success,
         products: products,
         currentPage: 1,
-        hasReachedMax: products.length < _pageSize,
       ));
-      refreshController.refreshCompleted();
-      refreshController.resetNoData();
     } catch (e) {
       debugPrint("Lỗi refreshProducts: $e");
       emit(state.copyWith(
         status: ProductListStatus.failure,
         errorMessage: 'Không thể tải sản phẩm',
       ));
-      refreshController.refreshFailed();
+    } finally {
+      refreshController.refreshCompleted();
     }
   }
 
   Future<void> _onLoadMore(
       ProductListLoadMore event, Emitter<ProductListState> emit) async {
-    if (state.hasReachedMax) return;
     emit(state.copyWith(status: ProductListStatus.loadingMore));
     try {
       final nextPage = state.currentPage + 1;
@@ -102,22 +98,16 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
         keyword: state.searchQuery,
         categoryId: state.selectedCategoryId,
       );
-      final hasReachedMax = newProducts.length < _pageSize;
       emit(state.copyWith(
         status: ProductListStatus.success,
         products: [...state.products, ...newProducts],
         currentPage: nextPage,
-        hasReachedMax: hasReachedMax,
       ));
-      if (hasReachedMax) {
-        refreshController.loadNoData();
-      } else {
-        refreshController.loadComplete();
-      }
     } catch (e) {
       debugPrint("Lỗi loadMore: $e");
       emit(state.copyWith(status: ProductListStatus.failure));
-      refreshController.loadFailed();
+    } finally {
+      refreshController.loadComplete();
     }
   }
 
@@ -147,7 +137,6 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
             state.products.where((p) => p.id != event.productId).toList();
         emit(state.copyWith(
             products: updated, deleteStatus: ProductDeleteStatus.loaded));
-        emit(state.copyWith(deleteStatus: ProductDeleteStatus.initial));
       } else {
         emit(state.copyWith(deleteStatus: ProductDeleteStatus.initial));
       }

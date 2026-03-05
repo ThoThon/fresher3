@@ -14,7 +14,6 @@ class ProductListState extends Equatable {
   final int? selectedCategoryId;
   final String searchQuery;
   final int currentPage;
-  final bool hasReachedMax;
   final String errorMessage;
   final ProductDeleteStatus deleteStatus;
 
@@ -25,7 +24,6 @@ class ProductListState extends Equatable {
     this.selectedCategoryId,
     this.searchQuery = '',
     this.currentPage = 1,
-    this.hasReachedMax = false,
     this.errorMessage = '',
     this.deleteStatus = ProductDeleteStatus.initial,
   });
@@ -38,7 +36,6 @@ class ProductListState extends Equatable {
     bool clearCategoryId = false,
     String? searchQuery,
     int? currentPage,
-    bool? hasReachedMax,
     String? errorMessage,
     ProductDeleteStatus? deleteStatus,
   }) {
@@ -51,7 +48,6 @@ class ProductListState extends Equatable {
           : (selectedCategoryId ?? this.selectedCategoryId),
       searchQuery: searchQuery ?? this.searchQuery,
       currentPage: currentPage ?? this.currentPage,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       errorMessage: errorMessage ?? this.errorMessage,
       deleteStatus: deleteStatus ?? this.deleteStatus,
     );
@@ -65,7 +61,6 @@ class ProductListState extends Equatable {
         selectedCategoryId,
         searchQuery,
         currentPage,
-        hasReachedMax,
         errorMessage,
         deleteStatus,
       ];

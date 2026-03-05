@@ -179,7 +179,6 @@ class _ProductListView extends StatelessWidget {
           onLoading: () =>
               context.read<ProductListBloc>().add(const ProductListLoadMore()),
           header: const WaterDropHeader(waterDropColor: Color(0xFFf24e1e)),
-          footer: _buildFooter(state),
           child: ListView.builder(
             padding: const EdgeInsets.all(12),
             itemCount: state.products.length,
@@ -246,31 +245,6 @@ class _ProductListView extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildFooter(ProductListState state) {
-    return CustomFooter(
-      builder: (context, mode) {
-        if (state.hasReachedMax) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Text(
-                "Không còn sản phẩm nào nữa",
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          );
-        }
-        return const SizedBox(
-          height: 55,
-          child: Center(
-            child: CircularProgressIndicator(
-                strokeWidth: 2, color: Color(0xFFf24e1e)),
-          ),
-        );
-      },
     );
   }
 
